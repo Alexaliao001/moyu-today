@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>今天能摸吗？- 办公室解压神器</title>
+    <title>今天能摸吗？</title>
     <meta name="description" content="办公室解压神器，专治不想上班。每日摸鱼运势，看看今天适不适合摸鱼！">
-    <meta name="keywords" content="摸鱼,摸鱼神器,上班摸鱼,解压,职场,办公室">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐟</text></svg>">
     <style>
         * {
@@ -15,91 +14,20 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #FFB347 0%, #FF8C00 50%, #FF6B00 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #FF9A3E 0%, #FF7A1A 50%, #FF6B00 100%);
+            min-height: 100vh;
+            color: #333;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        /* iPhone Frame */
-        .iphone-frame {
-            position: relative;
-            width: 320px;
-            height: 650px;
-            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 50%, #0a0a0a 100%);
-            border-radius: 50px;
-            padding: 12px;
-            box-shadow: 
-                0 0 0 3px #1a1a1a,
-                0 20px 60px rgba(0,0,0,0.4),
-                inset 0 0 10px rgba(255,255,255,0.1);
-        }
-
-        .iphone-screen {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #FF9A3E 0%, #FF7A1A 50%, #FF6B00 100%);
-            border-radius: 40px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Dynamic Island */
-        .dynamic-island {
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 28px;
-            background: #000;
-            border-radius: 20px;
-            z-index: 100;
-        }
-
-        /* Status Bar */
-        .status-bar {
-            position: absolute;
-            top: 12px;
-            left: 0;
-            right: 0;
-            height: 44px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 25px;
-            z-index: 50;
-        }
-
-        .status-time {
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-        }
-
-        .status-icons {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            color: white;
-        }
-
-        /* App Content */
-        .app-content {
-            padding: 60px 15px 20px;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .app-content::-webkit-scrollbar {
-            display: none;
         }
 
         /* Header */
@@ -107,148 +35,168 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            padding: 10px 0 20px;
         }
 
         .back-btn {
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             background: rgba(255,255,255,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 16px;
+            font-size: 24px;
+            font-weight: 300;
         }
 
-        .settings-btn {
+        .menu-btn {
             display: flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.2);
-            padding: 6px 10px;
-            border-radius: 16px;
-            cursor: pointer;
+            gap: 8px;
+            background: rgba(255,255,255,0.25);
+            padding: 8px 12px;
+            border-radius: 20px;
         }
 
-        .settings-dots {
+        .menu-dots {
             display: flex;
-            gap: 2px;
+            gap: 4px;
         }
 
-        .settings-dots span {
-            width: 4px;
-            height: 4px;
+        .menu-dots span {
+            width: 6px;
+            height: 6px;
             background: white;
             border-radius: 50%;
         }
 
-        .avatar-small {
-            width: 22px;
-            height: 22px;
+        .menu-avatar {
+            width: 28px;
+            height: 28px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 16px;
         }
 
         /* Title */
         .title {
             text-align: center;
             color: white;
-            font-size: 1.8em;
+            font-size: 2.8em;
             font-weight: bold;
-            text-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
         }
 
         /* Slot Machine */
         .slot-machine {
-            background: linear-gradient(145deg, #FFE4B5 0%, #FFD39B 100%);
-            border-radius: 16px;
-            padding: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background: linear-gradient(145deg, #FFE4B5 0%, #FFD39B 50%, #F5C77E 100%);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 25px;
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.2),
+                inset 0 2px 0 rgba(255,255,255,0.5);
             position: relative;
         }
 
         .slot-frame {
-            background: linear-gradient(145deg, #FFF8DC 0%, #FFE4B5 100%);
-            border-radius: 12px;
-            padding: 8px;
-            border: 3px solid #DAA520;
+            background: linear-gradient(180deg, #FFF8E7 0%, #FFE8C4 100%);
+            border-radius: 18px;
+            padding: 12px;
+            border: 5px solid #D4A84B;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .slot-reels {
             display: flex;
-            gap: 4px;
+            gap: 8px;
             justify-content: center;
         }
 
         .slot-reel {
-            width: 60px;
-            height: 140px;
-            background: #FFF8DC;
-            border-radius: 8px;
+            width: 90px;
+            height: 200px;
+            background: linear-gradient(180deg, #FFF8E7 0%, #FFFBF3 50%, #FFF8E7 100%);
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
-            border: 2px solid #DAA520;
+            border: 3px solid #D4A84B;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.08);
         }
 
         .reel-strip {
             position: absolute;
             width: 100%;
-            transition: transform 0.1s ease-out;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.15s ease-out;
         }
 
         .reel-item {
-            width: 60px;
-            height: 46px;
+            width: 90px;
+            height: 66px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 42px;
         }
 
+        /* Slot Handle */
         .slot-handle {
             position: absolute;
-            right: -18px;
+            right: -30px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
+            z-index: 10;
         }
 
         .handle-ball {
-            width: 22px;
-            height: 22px;
-            background: linear-gradient(145deg, #DAA520, #B8860B);
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(145deg, #E8C547 0%, #C9A227 50%, #A68520 100%);
             border-radius: 50%;
-            margin: 0 auto 3px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            margin: 0 auto 5px;
+            box-shadow: 
+                0 4px 12px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.4);
+            transition: transform 0.2s;
+        }
+
+        .handle-ball:active {
+            transform: translateY(15px);
         }
 
         .handle-stick {
-            width: 8px;
-            height: 55px;
-            background: linear-gradient(90deg, #CD853F, #DEB887, #CD853F);
-            border-radius: 4px;
+            width: 14px;
+            height: 80px;
+            background: linear-gradient(90deg, #C9A227 0%, #E8C547 30%, #C9A227 70%, #A68520 100%);
+            border-radius: 7px;
             margin: 0 auto;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.2);
         }
 
         /* Result Card */
         .result-card {
-            background: linear-gradient(145deg, #FFD700 0%, #FFA500 100%);
-            border-radius: 16px;
-            padding: 18px;
+            background: linear-gradient(145deg, #FFD54F 0%, #FFB300 50%, #FF9800 100%);
+            border-radius: 24px;
+            padding: 30px 25px;
             text-align: center;
-            margin-bottom: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            box-shadow: 
+                0 15px 40px rgba(255,152,0,0.4),
+                inset 0 2px 0 rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
             transform: scale(0);
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .result-card.show {
@@ -256,395 +204,250 @@
             opacity: 1;
         }
 
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
         .fortune-level {
-            font-size: 2.2em;
-            font-weight: bold;
+            font-size: 4em;
+            font-weight: 900;
             color: white;
-            text-shadow: 0 3px 8px rgba(0,0,0,0.2);
-            margin-bottom: 8px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+            letter-spacing: 0.1em;
+        }
+
+        .fortune-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .fortune-emoji {
-            font-size: 1.8em;
-            display: inline-block;
-            margin-right: 8px;
+            font-size: 3em;
         }
 
         .fortune-percent {
-            font-size: 1.8em;
-            font-weight: bold;
+            font-size: 3em;
+            font-weight: 900;
             color: white;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
 
         .fortune-message {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.95em;
-            margin-top: 10px;
-            line-height: 1.5;
+            color: white;
+            font-size: 1.2em;
+            margin-top: 25px;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         /* Stats Bar */
         .stats-bar {
             background: white;
-            border-radius: 12px;
-            padding: 12px 15px;
+            border-radius: 20px;
+            padding: 18px 25px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            margin-top: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .stats-bar.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .stats-bar .trophy {
-            font-size: 1.2em;
+            font-size: 1.8em;
         }
 
         .stats-text {
-            font-size: 0.85em;
-            color: #666;
+            font-size: 1.1em;
+            color: #555;
         }
 
         .stats-highlight {
             color: #FF6B00;
             font-weight: bold;
-        }
-
-        /* Golden Time */
-        .golden-time {
-            background: linear-gradient(180deg, rgba(255,140,0,0.3) 0%, rgba(255,107,0,0.3) 100%);
-            border-radius: 16px;
-            padding: 15px;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-
-        .clock-icon {
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-
-        .golden-title {
             font-size: 1.2em;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 8px;
-        }
-
-        .time-badge {
-            display: inline-block;
-            background: #FFD700;
-            color: #333;
-            padding: 6px 20px;
-            border-radius: 20px;
-            font-size: 1em;
-            font-weight: bold;
-        }
-
-        /* Tips Section */
-        .tips-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .tips-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .tips-header-icon {
-            font-size: 1.2em;
-        }
-
-        .tips-header-text {
-            font-size: 1em;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .tip-card {
-            background: #FFF5EB;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tip-icon {
-            font-size: 2em;
-            flex-shrink: 0;
-        }
-
-        .tip-content {
-            flex: 1;
-        }
-
-        .tip-title {
-            font-size: 0.95em;
-            font-weight: bold;
-            color: #FF6B00;
-            margin-bottom: 3px;
-        }
-
-        .tip-desc {
-            font-size: 0.8em;
-            color: #666;
-            line-height: 1.4;
-        }
-
-        /* Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            font-size: 0.9em;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .btn-share {
-            background: linear-gradient(145deg, #FF6B00, #FF8C00);
-            color: white;
-        }
-
-        .btn-again {
-            background: white;
-            color: #FF6B00;
-            border: 2px solid #FF6B00;
         }
 
         /* Initial State */
         .initial-state {
             text-align: center;
-            padding: 20px 0;
+            padding: 30px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .start-btn {
-            background: linear-gradient(145deg, #FFD700, #FFA500);
+            background: linear-gradient(145deg, #FFD54F 0%, #FFB300 100%);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
+            padding: 22px 60px;
+            font-size: 1.4em;
             font-weight: bold;
-            border-radius: 25px;
+            border-radius: 35px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(255,165,0,0.4);
+            box-shadow: 0 12px 35px rgba(255,179,0,0.5);
+            transition: all 0.3s;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 45px rgba(255,179,0,0.6);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
         }
 
         .hint-text {
             color: rgba(255,255,255,0.8);
-            margin-top: 12px;
-            font-size: 0.8em;
+            margin-top: 20px;
+            font-size: 1em;
         }
 
         /* Loading */
         .loading-text {
             text-align: center;
-            color: rgba(255,255,255,0.8);
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-
-        /* Home Indicator */
-        .home-indicator {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 5px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 3px;
-        }
-
-        /* Page Title */
-        .page-title {
-            color: white;
-            font-size: 2em;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .page-subtitle {
             color: rgba(255,255,255,0.9);
             font-size: 1.1em;
-            text-align: center;
-            margin-bottom: 30px;
+            margin-top: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
         /* Confetti */
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            animation: fall 3s linear forwards;
+            width: 12px;
+            height: 12px;
+            top: -20px;
+            animation: confetti-fall 3.5s linear forwards;
             pointer-events: none;
+            z-index: 1000;
         }
 
-        @keyframes fall {
-            to {
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
                 transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
             }
         }
 
         /* Responsive */
-        @media (max-width: 400px) {
-            .iphone-frame {
-                width: 290px;
-                height: 590px;
-            }
+        @media (max-width: 380px) {
+            .title { font-size: 2.2em; }
+            .slot-reel { width: 75px; height: 170px; }
+            .reel-item { width: 75px; height: 56px; font-size: 36px; }
+            .fortune-level { font-size: 3em; }
+            .fortune-emoji, .fortune-percent { font-size: 2.5em; }
         }
 
-        @media (min-width: 768px) {
-            .page-title {
-                font-size: 2.5em;
-            }
-            .iphone-frame {
-                width: 350px;
-                height: 710px;
-            }
+        @media (min-width: 500px) {
+            .container { padding: 30px; }
+            .title { font-size: 3.2em; }
         }
     </style>
 </head>
 <body>
-    <h1 class="page-title">🐟 今天能摸吗？</h1>
-    <p class="page-subtitle">办公室解压神器，专治不想上班</p>
-
-    <!-- iPhone Frame -->
-    <div class="iphone-frame">
-        <div class="iphone-screen">
-            <!-- Dynamic Island -->
-            <div class="dynamic-island"></div>
-            
-            <!-- Status Bar -->
-            <div class="status-bar">
-                <span class="status-time">9:41</span>
-                <div class="status-icons">
-                    <span>📶</span>
-                    <span>📡</span>
-                    <span>🔋</span>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">‹</div>
+            <div class="menu-btn">
+                <div class="menu-dots">
+                    <span></span><span></span><span></span>
                 </div>
+                <div class="menu-avatar">🐱</div>
             </div>
+        </div>
 
-            <!-- App Content -->
-            <div class="app-content">
-                <!-- Header -->
-                <div class="header">
-                    <div class="back-btn">‹</div>
-                    <div class="settings-btn" onclick="openSettings()">
-                        <div class="settings-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <div class="avatar-small" id="headerAvatar">🐱</div>
+        <!-- Title -->
+        <h1 class="title">今天能摸吗？</h1>
+
+        <!-- Slot Machine -->
+        <div class="slot-machine">
+            <div class="slot-frame">
+                <div class="slot-reels">
+                    <div class="slot-reel" id="reel1">
+                        <div class="reel-strip"></div>
                     </div>
-                </div>
-
-                <!-- Title -->
-                <h2 class="title">今天能摸吗？</h2>
-
-                <!-- Slot Machine -->
-                <div class="slot-machine">
-                    <div class="slot-frame">
-                        <div class="slot-reels">
-                            <div class="slot-reel" id="reel1">
-                                <div class="reel-strip"></div>
-                            </div>
-                            <div class="slot-reel" id="reel2">
-                                <div class="reel-strip"></div>
-                            </div>
-                            <div class="slot-reel" id="reel3">
-                                <div class="reel-strip"></div>
-                            </div>
-                        </div>
+                    <div class="slot-reel" id="reel2">
+                        <div class="reel-strip"></div>
                     </div>
-                    <div class="slot-handle" onclick="spin()">
-                        <div class="handle-ball"></div>
-                        <div class="handle-stick"></div>
-                    </div>
-                </div>
-
-                <!-- Initial State -->
-                <div class="initial-state" id="initialState">
-                    <button class="start-btn" onclick="spin()">🎰 开始抽签</button>
-                    <p class="hint-text">点击按钮或拉动手柄</p>
-                </div>
-
-                <!-- Loading -->
-                <p class="loading-text" id="loadingText" style="display: none;">命运的齿轮开始转动...</p>
-
-                <!-- Result Card -->
-                <div class="result-card" id="resultCard">
-                    <div class="fortune-level" id="fortuneLevel">大吉</div>
-                    <div>
-                        <span class="fortune-emoji" id="fortuneEmoji">😎</span>
-                        <span class="fortune-percent" id="fortunePercent">88%</span>
-                    </div>
-                    <p class="fortune-message" id="fortuneMessage">「今天老板不在，放心大胆摸！」</p>
-                </div>
-
-                <!-- Stats Bar -->
-                <div class="stats-bar" id="statsBar" style="display: none;">
-                    <span class="trophy">🏆</span>
-                    <span class="stats-text">摸鱼打败了 <span class="stats-highlight" id="beatPercent">92%</span> 的打工人！</span>
-                </div>
-
-                <!-- Golden Time -->
-                <div class="golden-time" id="goldenTime" style="display: none;">
-                    <div class="clock-icon">⏰</div>
-                    <h3 class="golden-title">黄金摸鱼时段</h3>
-                    <div class="time-badge" id="goldenTimeBadge">14:00-15:30</div>
-                </div>
-
-                <!-- Tips Section -->
-                <div class="tips-section" id="tipsSection" style="display: none;">
-                    <div class="tips-header">
-                        <span class="tips-header-icon">💡</span>
-                        <span class="tips-header-text">摸鱼小技巧</span>
-                    </div>
-                    <div id="tipsList"></div>
-                    
-                    <div class="action-buttons">
-                        <button class="action-btn btn-share" onclick="shareResult()">📤 分享</button>
-                        <button class="action-btn btn-again" onclick="spin()">🔄 再来</button>
+                    <div class="slot-reel" id="reel3">
+                        <div class="reel-strip"></div>
                     </div>
                 </div>
             </div>
+            <div class="slot-handle" onclick="spin()">
+                <div class="handle-ball"></div>
+                <div class="handle-stick"></div>
+            </div>
+        </div>
 
-            <!-- Home Indicator -->
-            <div class="home-indicator"></div>
+        <!-- Initial State -->
+        <div class="initial-state" id="initialState">
+            <button class="start-btn" onclick="spin()">🎰 开始抽签</button>
+            <p class="hint-text">点击按钮或拉动手柄，测测今天的摸鱼运势</p>
+        </div>
+
+        <!-- Loading -->
+        <p class="loading-text" id="loadingText" style="display: none;">命运的齿轮开始转动...</p>
+
+        <!-- Result Card -->
+        <div class="result-card" id="resultCard">
+            <div class="fortune-level" id="fortuneLevel">大吉</div>
+            <div class="fortune-row">
+                <span class="fortune-emoji" id="fortuneEmoji">😎</span>
+                <span class="fortune-percent" id="fortunePercent">88%</span>
+            </div>
+            <p class="fortune-message" id="fortuneMessage">今天老板不在，放心大胆摸！</p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+            <span class="trophy">🏆</span>
+            <span class="stats-text">摸鱼打败了全国 <span class="stats-highlight" id="beatPercent">92%</span> 的打工人！</span>
         </div>
     </div>
 
     <script>
-        // Data
-        const emojis = ['🐱', '😴', '☕', '🎮', '🛏️', '📱', '🍜', '💤', '🎵', '🌴', '🐟', '😎'];
+        const emojis = ['🐱', '😴', '☕', '🎮', '🛏️', '📱', '🍜', '💤', '🎵', '🌴', '🐟', '😎', '🎧', '🍕'];
         
         const fortunes = [
-            { level: '大吉', emoji: '😎', minPercent: 80, maxPercent: 99 },
-            { level: '中吉', emoji: '😊', minPercent: 60, maxPercent: 79 },
-            { level: '小吉', emoji: '🙂', minPercent: 40, maxPercent: 59 },
-            { level: '末吉', emoji: '😐', minPercent: 20, maxPercent: 39 },
-            { level: '凶', emoji: '😰', minPercent: 5, maxPercent: 19 }
+            { level: '大吉', emoji: '😎', minPercent: 85, maxPercent: 99 },
+            { level: '中吉', emoji: '😊', minPercent: 65, maxPercent: 84 },
+            { level: '小吉', emoji: '🙂', minPercent: 45, maxPercent: 64 },
+            { level: '末吉', emoji: '😐', minPercent: 25, maxPercent: 44 },
+            { level: '凶', emoji: '😰', minPercent: 5, maxPercent: 24 }
         ];
 
         const messages = [
@@ -670,30 +473,16 @@
             "适合戴上耳机假装在开会。"
         ];
 
-        const tips = [
-            { icon: '🚽', title: '带薪上厕所', desc: '每天带薪如厕15分钟，一年多赚一周工资！' },
-            { icon: '💻', title: '假装很忙', desc: '打开多个窗口，眉头紧锁，偶尔叹气。' },
-            { icon: '☕', title: '茶水间社交', desc: '去接水顺便聊个天，合理合法的摸鱼时间。' },
-            { icon: '📧', title: '邮件艺术', desc: '一封邮件分三次发，显得工作很饱和。' },
-            { icon: '🎧', title: '耳机护体', desc: '戴上耳机，假装在听会议录音。' },
-            { icon: '📊', title: 'Excel大法', desc: '打开一个复杂的表格，没人知道你在干嘛。' }
-        ];
-
-        const goldenTimes = ['09:30-10:00', '11:30-12:00', '14:00-15:30', '16:30-17:30'];
-
         let isSpinning = false;
-        let currentFortune = null;
 
-        // Initialize
         function init() {
             initReels();
         }
 
         function initReels() {
-            const reels = document.querySelectorAll('.reel-strip');
-            reels.forEach(reel => {
+            document.querySelectorAll('.reel-strip').forEach(reel => {
                 let html = '';
-                for (let i = 0; i < 15; i++) {
+                for (let i = 0; i < 12; i++) {
                     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
                     html += `<div class="reel-item">${emoji}</div>`;
                 }
@@ -708,29 +497,24 @@
             document.getElementById('initialState').style.display = 'none';
             document.getElementById('loadingText').style.display = 'block';
             document.getElementById('resultCard').classList.remove('show');
-            document.getElementById('statsBar').style.display = 'none';
-            document.getElementById('goldenTime').style.display = 'none';
-            document.getElementById('tipsSection').style.display = 'none';
+            document.getElementById('statsBar').classList.remove('show');
 
-            // Animate reels
             const strips = document.querySelectorAll('.reel-strip');
-            let spinCount = 0;
             const spinInterval = setInterval(() => {
                 strips.forEach(strip => {
                     let html = '';
-                    for (let i = 0; i < 15; i++) {
+                    for (let i = 0; i < 12; i++) {
                         const emoji = emojis[Math.floor(Math.random() * emojis.length)];
                         html += `<div class="reel-item">${emoji}</div>`;
                     }
                     strip.innerHTML = html;
                 });
-                spinCount++;
             }, 80);
 
             setTimeout(() => {
                 clearInterval(spinInterval);
                 showResult();
-            }, 2000);
+            }, 2200);
         }
 
         function showResult() {
@@ -738,78 +522,42 @@
             document.getElementById('loadingText').style.display = 'none';
 
             const fortuneIndex = Math.floor(Math.random() * fortunes.length);
-            currentFortune = fortunes[fortuneIndex];
-            const percent = Math.floor(Math.random() * (currentFortune.maxPercent - currentFortune.minPercent + 1)) + currentFortune.minPercent;
+            const fortune = fortunes[fortuneIndex];
+            const percent = Math.floor(Math.random() * (fortune.maxPercent - fortune.minPercent + 1)) + fortune.minPercent;
             const message = messages[Math.floor(Math.random() * messages.length)];
-            const beatPercent = Math.floor(Math.random() * 30) + 70;
-            const goldenTime = goldenTimes[Math.floor(Math.random() * goldenTimes.length)];
+            const beatPercent = Math.floor(Math.random() * 25) + 75;
 
-            document.getElementById('fortuneLevel').textContent = currentFortune.level;
-            document.getElementById('fortuneEmoji').textContent = currentFortune.emoji;
+            document.getElementById('fortuneLevel').textContent = fortune.level;
+            document.getElementById('fortuneEmoji').textContent = fortune.emoji;
             document.getElementById('fortunePercent').textContent = percent + '%';
-            document.getElementById('fortuneMessage').textContent = `「${message}」`;
+            document.getElementById('fortuneMessage').textContent = message;
             document.getElementById('beatPercent').textContent = beatPercent + '%';
-            document.getElementById('goldenTimeBadge').textContent = goldenTime;
 
             document.getElementById('resultCard').classList.add('show');
 
             setTimeout(() => {
-                document.getElementById('statsBar').style.display = 'flex';
-            }, 200);
-
-            setTimeout(() => {
-                document.getElementById('goldenTime').style.display = 'block';
+                document.getElementById('statsBar').classList.add('show');
             }, 400);
-
-            setTimeout(() => {
-                showTips();
-                document.getElementById('tipsSection').style.display = 'block';
-            }, 600);
 
             if (fortuneIndex <= 1) {
                 createConfetti();
             }
         }
 
-        function showTips() {
-            const shuffled = [...tips].sort(() => Math.random() - 0.5).slice(0, 2);
-            document.getElementById('tipsList').innerHTML = shuffled.map(tip => `
-                <div class="tip-card">
-                    <div class="tip-icon">${tip.icon}</div>
-                    <div class="tip-content">
-                        <div class="tip-title">${tip.title}</div>
-                        <div class="tip-desc">${tip.desc}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
         function createConfetti() {
-            const colors = ['#FFD700', '#FF6B00', '#FF69B4', '#00CED1', '#98FB98'];
-            for (let i = 0; i < 30; i++) {
+            const colors = ['#FFD700', '#FF6B00', '#FF69B4', '#00CED1', '#98FB98', '#FF4500', '#9370DB'];
+            for (let i = 0; i < 40; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
                     confetti.style.left = Math.random() * 100 + 'vw';
                     confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
                     document.body.appendChild(confetti);
                     setTimeout(() => confetti.remove(), 4000);
-                }, i * 50);
+                }, i * 60);
             }
-        }
-
-        function shareResult() {
-            const text = `🐟 今日摸鱼运势：${currentFortune.level}\n${document.getElementById('fortuneMessage').textContent}\n\n来测测你的摸鱼运势 👉 chillworks.ai`;
-            if (navigator.share) {
-                navigator.share({ title: '今天能摸吗？', text: text, url: 'https://chillworks.ai' });
-            } else {
-                navigator.clipboard.writeText(text).then(() => alert('已复制到剪贴板！'));
-            }
-        }
-
-        function openSettings() {
-            alert('个性化设置功能即将上线！');
         }
 
         init();
