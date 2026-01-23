@@ -4,394 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>今天能摸吗？- ChillWorks</title>
-    <meta name="description" content="办公室解压神器，专治不想上班。每日摸鱼运势，看看今天适不适合摸鱼！">
+    <meta name="description" content="每日摸鱼运势占卜，用轻松有趣的方式提醒你：适度休息，才能更好地工作。">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐟</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(180deg, #FF9A3E 0%, #FF7A1A 50%, #FF6B00 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+            background: linear-gradient(180deg, #FFB88C 0%, #FF9A6C 30%, #FF8C5A 60%, #FF7A4A 100%);
             min-height: 100vh;
-            color: #333;
-            padding-bottom: env(safe-area-inset-bottom);
+            color: #2D2D2D;
         }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0 20px;
-        }
-        .back-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: 300;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-        .back-btn:hover { background: rgba(255,255,255,0.3); }
-        .menu-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.25);
-            padding: 8px 12px;
-            border-radius: 20px;
-        }
-        .menu-dots { display: flex; gap: 4px; }
-        .menu-dots span { width: 6px; height: 6px; background: white; border-radius: 50%; }
-        .menu-avatar {
-            width: 28px;
-            height: 28px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        .title {
-            text-align: center;
-            color: white;
-            font-size: 2.8em;
-            font-weight: bold;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            margin-bottom: 30px;
-        }
-        .slot-machine {
-            background: linear-gradient(145deg, #FFE4B5 0%, #FFD39B 50%, #F5C77E 100%);
-            border-radius: 24px;
-            padding: 16px;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.5);
-            position: relative;
-        }
-        .slot-frame {
-            background: linear-gradient(180deg, #FFF8E7 0%, #FFE8C4 100%);
-            border-radius: 18px;
-            padding: 12px;
-            border: 5px solid #D4A84B;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .slot-reels { display: flex; gap: 8px; justify-content: center; }
-        .slot-reel {
-            width: 90px;
-            height: 200px;
-            background: linear-gradient(180deg, #FFF8E7 0%, #FFFBF3 50%, #FFF8E7 100%);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            border: 3px solid #D4A84B;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.08);
-        }
-        .reel-strip {
-            position: absolute;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.15s ease-out;
-        }
-        .reel-item {
-            width: 90px;
-            height: 66px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 42px;
-        }
-        .slot-handle {
-            position: absolute;
-            right: -30px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            z-index: 10;
-        }
-        .handle-ball {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(145deg, #E8C547 0%, #C9A227 50%, #A68520 100%);
-            border-radius: 50%;
-            margin: 0 auto 5px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4);
-            transition: transform 0.2s;
-        }
-        .handle-ball:active { transform: translateY(15px); }
-        .handle-stick {
-            width: 14px;
-            height: 80px;
-            background: linear-gradient(90deg, #C9A227 0%, #E8C547 30%, #C9A227 70%, #A68520 100%);
-            border-radius: 7px;
-            margin: 0 auto;
-            box-shadow: 2px 0 4px rgba(0,0,0,0.2);
-        }
-        .result-card {
-            background: linear-gradient(145deg, #FFD54F 0%, #FFB300 50%, #FF9800 100%);
-            border-radius: 24px;
-            padding: 30px 25px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 15px 40px rgba(255,152,0,0.4), inset 0 2px 0 rgba(255,255,255,0.3);
-            position: relative;
-            overflow: hidden;
-            transform: scale(0);
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .result-card.show { transform: scale(1); opacity: 1; }
-        .result-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .fortune-level {
-            font-size: 4em;
-            font-weight: 900;
-            color: white;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            margin-bottom: 15px;
-            letter-spacing: 0.1em;
-        }
-        .fortune-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .fortune-emoji { font-size: 3em; }
-        .fortune-percent {
-            font-size: 3em;
-            font-weight: 900;
-            color: white;
-            text-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-        .fortune-message {
-            color: white;
-            font-size: 1.2em;
-            margin-top: 25px;
-            font-weight: 500;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .stats-bar {
-            background: white;
-            border-radius: 20px;
-            padding: 18px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            margin-top: auto;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-        .stats-bar.show { opacity: 1; transform: translateY(0); }
-        .stats-bar .trophy { font-size: 1.8em; }
-        .stats-text { font-size: 1.1em; color: #555; }
-        .stats-highlight { color: #FF6B00; font-weight: bold; font-size: 1.2em; }
-        .initial-state {
-            text-align: center;
-            padding: 30px 0;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .start-btn {
-            background: linear-gradient(145deg, #FFD54F 0%, #FFB300 100%);
-            color: white;
-            border: none;
-            padding: 22px 60px;
-            font-size: 1.4em;
-            font-weight: bold;
-            border-radius: 35px;
-            cursor: pointer;
-            box-shadow: 0 12px 35px rgba(255,179,0,0.5);
-            transition: all 0.3s;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        }
-        .start-btn:hover { transform: translateY(-3px); box-shadow: 0 18px 45px rgba(255,179,0,0.6); }
-        .start-btn:active { transform: translateY(0); }
-        .hint-text { color: rgba(255,255,255,0.8); margin-top: 20px; font-size: 1em; }
-        .loading-text {
-            text-align: center;
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1em;
-            margin-top: 20px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-        .confetti {
-            position: fixed;
-            width: 12px;
-            height: 12px;
-            top: -20px;
-            animation: confetti-fall 3.5s linear forwards;
-            pointer-events: none;
-            z-index: 1000;
-        }
-        @keyframes confetti-fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-        @media (max-width: 380px) {
-            .title { font-size: 2.2em; }
-            .slot-reel { width: 75px; height: 170px; }
-            .reel-item { width: 75px; height: 56px; font-size: 36px; }
-            .fortune-level { font-size: 3em; }
-            .fortune-emoji, .fortune-percent { font-size: 2.5em; }
-        }
-        @media (min-width: 500px) { .container { padding: 30px; } .title { font-size: 3.2em; } }
+        .container { max-width: 450px; margin: 0 auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 25px; }
+        .back-btn { width: 44px; height: 44px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; text-decoration: none; transition: all 0.3s; backdrop-filter: blur(10px); }
+        .back-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.05); }
+        .avatar-btn { width: 44px; height: 44px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .avatar-btn:hover { transform: scale(1.1); }
+        .main-card { background: #FFF8F2; border-radius: 28px; padding: 35px 25px; margin-bottom: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); text-align: center; position: relative; overflow: hidden; }
+        .main-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #FFB88C, #FF6B3D); }
+        .card-title { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 1.8em; font-weight: 700; margin-bottom: 25px; }
+        .card-title .fish { font-size: 1.2em; animation: swim 2s ease-in-out infinite; }
+        @keyframes swim { 0%, 100% { transform: translateX(0) rotate(-5deg); } 50% { transform: translateX(5px) rotate(5deg); } }
+        .stars-rating { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .stars { display: flex; gap: 3px; }
+        .star { color: #FFD700; font-size: 1.4em; }
+        .star.empty { color: #DDD; }
+        .rating-text { font-size: 1.1em; font-weight: 600; color: #FF6B3D; }
+        .fortune-message { font-size: 1.1em; color: #666; line-height: 1.7; padding: 0 10px; }
+        .share-section { display: flex; justify-content: center; gap: 25px; margin-bottom: 30px; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: all 0.3s; }
+        .share-btn:hover { transform: translateY(-5px); }
+        .share-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8em; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .share-wechat .share-icon { background: linear-gradient(145deg, #7BB32E, #5A9216); color: white; }
+        .share-weibo .share-icon { background: linear-gradient(145deg, #FF8140, #E6162D); color: white; }
+        .share-copy .share-icon { background: linear-gradient(145deg, #F5F5F5, #E8E8E8); color: #666; }
+        .share-label { font-size: 0.85em; color: white; font-weight: 500; }
+        .avatar-panel { background: white; border-radius: 28px 28px 0 0; padding: 30px 25px 40px; position: fixed; bottom: 0; left: 0; right: 0; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 40px rgba(0,0,0,0.15); z-index: 100; }
+        .avatar-panel.show { transform: translateY(0); }
+        .panel-handle { width: 40px; height: 5px; background: #E0E0E0; border-radius: 3px; margin: 0 auto 25px; }
+        .panel-title { text-align: center; margin-bottom: 8px; font-size: 1.2em; font-weight: 600; }
+        .panel-subtitle { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 25px; }
+        .avatar-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .avatar-option { width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; cursor: pointer; transition: all 0.3s; background: #FFF5EB; border: 3px solid transparent; }
+        .avatar-option:hover { transform: scale(1.1); }
+        .avatar-option.selected { border-color: #FF8C5A; background: #FFF0E6; box-shadow: 0 0 0 4px rgba(255, 140, 90, 0.2); }
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 99; }
+        .overlay.show { opacity: 1; visibility: visible; }
+        .initial-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; }
+        .start-btn { background: linear-gradient(145deg, #FFF5EB, #FFE8D6); color: #FF6B3D; border: none; padding: 22px 55px; font-size: 1.3em; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 15px 40px rgba(0,0,0,0.15); transition: all 0.4s; display: flex; align-items: center; gap: 10px; }
+        .start-btn:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        .hint-text { color: rgba(255,255,255,0.85); margin-top: 20px; font-size: 0.95em; }
+        .result-state { display: none; }
+        .result-state.show { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .try-again-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.2); color: white; border: none; padding: 16px 35px; font-size: 1em; font-weight: 600; border-radius: 25px; cursor: pointer; margin: 0 auto; transition: all 0.3s; backdrop-filter: blur(10px); }
+        .try-again-btn:hover { background: rgba(255,255,255,0.3); }
+        .loading-state { display: none; text-align: center; padding: 40px 0; }
+        .loading-state.show { display: block; }
+        .loading-spinner { font-size: 4em; animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .loading-text { color: white; font-size: 1.1em; margin-top: 20px; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+        .confetti { position: fixed; width: 10px; height: 10px; top: -20px; pointer-events: none; z-index: 1000; animation: confetti-fall 3s linear forwards; }
+        @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(0,0,0,0.8); color: white; padding: 15px 30px; border-radius: 30px; font-size: 0.95em; opacity: 0; transition: all 0.4s; z-index: 200; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .footer { text-align: center; padding: 20px 0; margin-top: auto; }
+        .footer a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.85em; }
+        .footer a:hover { color: rgba(255,255,255,0.9); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <a href="../" class="back-btn">‹</a>
-            <div class="menu-btn">
-                <div class="menu-dots"><span></span><span></span><span></span></div>
-                <div class="menu-avatar">🐱</div>
-            </div>
-        </div>
-        <h1 class="title">今天能摸吗？</h1>
-        <div class="slot-machine">
-            <div class="slot-frame">
-                <div class="slot-reels">
-                    <div class="slot-reel" id="reel1"><div class="reel-strip"></div></div>
-                    <div class="slot-reel" id="reel2"><div class="reel-strip"></div></div>
-                    <div class="slot-reel" id="reel3"><div class="reel-strip"></div></div>
-                </div>
-            </div>
-            <div class="slot-handle" onclick="spin()">
-                <div class="handle-ball"></div>
-                <div class="handle-stick"></div>
-            </div>
+            <div class="avatar-btn" id="avatarBtn">🐱</div>
         </div>
         <div class="initial-state" id="initialState">
-            <button class="start-btn" onclick="spin()">🎰 开始抽签</button>
-            <p class="hint-text">点击按钮或拉动手柄，测测今天的摸鱼运势</p>
+            <button class="start-btn" onclick="startFortune()"><span>🐟</span>测测今日运势</button>
+            <p class="hint-text">看看今天适不适合摸鱼</p>
         </div>
-        <p class="loading-text" id="loadingText" style="display: none;">命运的齿轮开始转动...</p>
-        <div class="result-card" id="resultCard">
-            <div class="fortune-level" id="fortuneLevel">大吉</div>
-            <div class="fortune-row">
-                <span class="fortune-emoji" id="fortuneEmoji">😎</span>
-                <span class="fortune-percent" id="fortunePercent">88%</span>
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner">🐟</div>
+            <p class="loading-text">正在占卜中...</p>
+        </div>
+        <div class="result-state" id="resultState">
+            <div class="main-card">
+                <h2 class="card-title">今日摸鱼运势<span class="fish">🐟</span></h2>
+                <div class="stars-rating">
+                    <div class="stars" id="starsContainer"></div>
+                    <span class="rating-text" id="ratingText">Excellent Slacking!</span>
+                </div>
+                <p class="fortune-message" id="fortuneMessage"></p>
             </div>
-            <p class="fortune-message" id="fortuneMessage">今天老板不在，放心大胆摸！</p>
+            <div class="share-section">
+                <div class="share-btn share-wechat" onclick="shareToWechat()">
+                    <div class="share-icon">💬</div>
+                    <span class="share-label">微信</span>
+                </div>
+                <div class="share-btn share-weibo" onclick="shareToWeibo()">
+                    <div class="share-icon">📢</div>
+                    <span class="share-label">微博</span>
+                </div>
+                <div class="share-btn share-copy" onclick="copyResult()">
+                    <div class="share-icon">📋</div>
+                    <span class="share-label">复制</span>
+                </div>
+            </div>
+            <button class="try-again-btn" onclick="startFortune()"><span>🔄</span>再来一次</button>
         </div>
-        <div class="stats-bar" id="statsBar">
-            <span class="trophy">🏆</span>
-            <span class="stats-text">摸鱼打败了全国 <span class="stats-highlight" id="beatPercent">92%</span> 的打工人！</span>
-        </div>
+        <div class="footer"><a href="../">ChillWorks · AI for Life</a></div>
     </div>
+    <div class="overlay" id="overlay" onclick="closePanel()"></div>
+    <div class="avatar-panel" id="avatarPanel">
+        <div class="panel-handle"></div>
+        <h3 class="panel-title">Personalize Your Avatar</h3>
+        <p class="panel-subtitle">Select a cute icon</p>
+        <div class="avatar-grid" id="avatarGrid"></div>
+    </div>
+    <div class="toast" id="toast">已复制到剪贴板</div>
     <script>
-        const emojis = ['🐱', '😴', '☕', '🎮', '🛏️', '📱', '🍜', '💤', '🎵', '🌴', '🐟', '😎', '🎧', '🍕'];
+        const avatars = ['🐱', '🐼', '🦊', '🐧', '🐰', '🦁', '🐨', '🐯'];
         const fortunes = [
-            { level: '大吉', emoji: '😎', minPercent: 85, maxPercent: 99 },
-            { level: '中吉', emoji: '😊', minPercent: 65, maxPercent: 84 },
-            { level: '小吉', emoji: '🙂', minPercent: 45, maxPercent: 64 },
-            { level: '末吉', emoji: '😐', minPercent: 25, maxPercent: 44 },
-            { level: '凶', emoji: '😰', minPercent: 5, maxPercent: 24 }
+            { stars: 5, rating: 'Excellent Slacking!', messages: ['Remember to stretch and look busy!\nA perfect day to drift like a leaf.', '今天老板不在，放心大胆摸！\n宇宙都在支持你休息。', '五星好运！今天摸鱼不会被发现。\n记得假装很忙的样子。'] },
+            { stars: 4, rating: 'Great Vibes!', messages: ['运势不错，适度摸鱼。\n记得偶尔看看屏幕。', '今天可以放松一下。\n但要保持警觉哦。', '四星运势，摸鱼愉快！\n建议戴上耳机。'] },
+            { stars: 3, rating: 'Moderate Chill', messages: ['中等运势，小心行事。\n建议分散摸鱼时间。', '今天要低调一点。\n短暂休息即可。', '三星运势，谨慎摸鱼。\n注意周围动静。'] },
+            { stars: 2, rating: 'Stay Alert', messages: ['运势一般，建议专注工作。\n休息时间缩短一点。', '今天不太适合摸鱼。\n老板可能在附近。', '两星警告，保持警惕！\n建议假装很忙。'] },
+            { stars: 1, rating: 'Work Hard Today', messages: ['今天不适合摸鱼！\n专心工作吧。', '一星警告，危险！\n老板今天眼神很锐利。', '今天还是认真工作吧。\n明天会更好的。'] }
         ];
-        const messages = [
-            "今天老板不在，放心大胆摸！",
-            "摸鱼一时爽，一直摸一直爽！",
-            "工作是做不完的，但摸鱼的时光是有限的。",
-            "今天适合带薪拉屎，记得带手机。",
-            "假装很忙，实际在神游。",
-            "今天的KPI就是不被发现在摸鱼。",
-            "灵魂已经下班，肉体还在工位。",
-            "今天适合对着屏幕发呆。",
-            "摸鱼使我快乐，工作使我憔悴。",
-            "今天的运势：老板不会突然出现。",
-            "适合假装在思考人生。",
-            "今天可以多喝几杯水，顺便多上几次厕所。",
-            "建议今天开会时打开摄像头但关闭大脑。",
-            "今日宜：摸鱼、划水、带薪午睡。",
-            "今天的效率：用1小时完成10分钟的工作。",
-            "适合打开Excel假装在做数据分析。",
-            "今天可以名正言顺地说在等需求。",
-            "建议今天把摸鱼时间拉满。",
-            "今天老板的眼神不会扫到你这边。",
-            "适合戴上耳机假装在开会。"
-        ];
-        let isSpinning = false;
-        function init() { initReels(); }
-        function initReels() {
-            document.querySelectorAll('.reel-strip').forEach(reel => {
-                let html = '';
-                for (let i = 0; i < 12; i++) {
-                    html += `<div class="reel-item">${emojis[Math.floor(Math.random() * emojis.length)]}</div>`;
-                }
-                reel.innerHTML = html;
+        let selectedAvatar = localStorage.getItem('avatar') || '🐱';
+        let currentFortune = null;
+        function init() {
+            document.getElementById('avatarBtn').textContent = selectedAvatar;
+            renderAvatarGrid();
+            document.getElementById('avatarBtn').addEventListener('click', () => {
+                document.getElementById('avatarPanel').classList.add('show');
+                document.getElementById('overlay').classList.add('show');
             });
         }
-        function spin() {
-            if (isSpinning) return;
-            isSpinning = true;
+        function renderAvatarGrid() {
+            document.getElementById('avatarGrid').innerHTML = avatars.map(a => `<div class="avatar-option ${a === selectedAvatar ? 'selected' : ''}" onclick="selectAvatar('${a}')">${a}</div>`).join('');
+        }
+        function closePanel() {
+            document.getElementById('avatarPanel').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+        }
+        function selectAvatar(avatar) {
+            selectedAvatar = avatar;
+            localStorage.setItem('avatar', avatar);
+            document.getElementById('avatarBtn').textContent = avatar;
+            renderAvatarGrid();
+            setTimeout(closePanel, 300);
+        }
+        function startFortune() {
             document.getElementById('initialState').style.display = 'none';
-            document.getElementById('loadingText').style.display = 'block';
-            document.getElementById('resultCard').classList.remove('show');
-            document.getElementById('statsBar').classList.remove('show');
-            const strips = document.querySelectorAll('.reel-strip');
-            const spinInterval = setInterval(() => {
-                strips.forEach(strip => {
-                    let html = '';
-                    for (let i = 0; i < 12; i++) {
-                        html += `<div class="reel-item">${emojis[Math.floor(Math.random() * emojis.length)]}</div>`;
-                    }
-                    strip.innerHTML = html;
-                });
-            }, 80);
-            setTimeout(() => { clearInterval(spinInterval); showResult(); }, 2200);
+            document.getElementById('resultState').classList.remove('show');
+            document.getElementById('loadingState').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('loadingState').classList.remove('show');
+                showResult();
+            }, 1500);
         }
         function showResult() {
-            isSpinning = false;
-            document.getElementById('loadingText').style.display = 'none';
-            const fortuneIndex = Math.floor(Math.random() * fortunes.length);
-            const fortune = fortunes[fortuneIndex];
-            const percent = Math.floor(Math.random() * (fortune.maxPercent - fortune.minPercent + 1)) + fortune.minPercent;
-            const message = messages[Math.floor(Math.random() * messages.length)];
-            const beatPercent = Math.floor(Math.random() * 25) + 75;
-            document.getElementById('fortuneLevel').textContent = fortune.level;
-            document.getElementById('fortuneEmoji').textContent = fortune.emoji;
-            document.getElementById('fortunePercent').textContent = percent + '%';
-            document.getElementById('fortuneMessage').textContent = message;
-            document.getElementById('beatPercent').textContent = beatPercent + '%';
-            document.getElementById('resultCard').classList.add('show');
-            setTimeout(() => { document.getElementById('statsBar').classList.add('show'); }, 400);
-            if (fortuneIndex <= 1) createConfetti();
+            const weights = [35, 30, 20, 10, 5];
+            const random = Math.random() * 100;
+            let cumulative = 0, fortuneIndex = 0;
+            for (let i = 0; i < weights.length; i++) {
+                cumulative += weights[i];
+                if (random <= cumulative) { fortuneIndex = i; break; }
+            }
+            currentFortune = fortunes[fortuneIndex];
+            const message = currentFortune.messages[Math.floor(Math.random() * currentFortune.messages.length)];
+            document.getElementById('ratingText').textContent = currentFortune.rating;
+            document.getElementById('fortuneMessage').innerHTML = message.replace('\n', '<br>');
+            const sc = document.getElementById('starsContainer');
+            sc.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const s = document.createElement('span');
+                s.className = 'star' + (i >= currentFortune.stars ? ' empty' : '');
+                s.textContent = '★';
+                sc.appendChild(s);
+            }
+            document.getElementById('resultState').classList.add('show');
+            if (currentFortune.stars >= 4) createConfetti();
         }
         function createConfetti() {
-            const colors = ['#FFD700', '#FF6B00', '#FF69B4', '#00CED1', '#98FB98', '#FF4500', '#9370DB'];
-            for (let i = 0; i < 40; i++) {
+            const colors = ['#FFD700', '#FF6B3D', '#FF69B4', '#00CED1', '#98FB98', '#FF4500', '#9370DB'];
+            for (let i = 0; i < 30; i++) {
                 setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
-                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 4000);
-                }, i * 60);
+                    const c = document.createElement('div');
+                    c.className = 'confetti';
+                    c.style.left = Math.random() * 100 + 'vw';
+                    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 3500);
+                }, i * 50);
             }
+        }
+        function shareToWechat() { showToast('请截图分享到微信'); }
+        function shareToWeibo() {
+            const t = encodeURIComponent(`🐟 今日摸鱼运势：${currentFortune.rating}\n${document.getElementById('fortuneMessage').textContent}\n\n来测测你的运势 👉 chillworks.ai/moyu`);
+            window.open(`https://service.weibo.com/share/share.php?title=${t}`, '_blank');
+        }
+        function copyResult() {
+            const t = `🐟 今日摸鱼运势：${currentFortune.rating}\n${'★'.repeat(currentFortune.stars)}${'☆'.repeat(5-currentFortune.stars)}\n${document.getElementById('fortuneMessage').textContent}\n\n来测测你的运势 👉 chillworks.ai/moyu`;
+            navigator.clipboard.writeText(t).then(() => showToast('已复制到剪贴板'));
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
         }
         init();
     </script>
