@@ -1,37 +1,1061 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>今天能摸吗</title>
-    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
-    <style id="expo-reset">
-      /* These styles make the body full-height */
-      html,
-      body {
-        height: 100%;
-      }
-      /* These styles disable body scrolling if you are using <ScrollView> */
-      body {
-        overflow: hidden;
-      }
-      /* These styles make the root element full-height */
-      #root {
-        display: flex;
-        height: 100%;
-        flex: 1;
-      }
-    </style>
-  <link rel="icon" href="/moyu-today/favicon.ico" /></head>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>今天能摸吗？</title>
+    <meta name="description" content="办公室解压神器，专治不想上班。每日摸鱼运势，看看今天适不适合摸鱼！">
+    <meta name="keywords" content="摸鱼,摸鱼神器,上班摸鱼,解压,职场,办公室">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐟</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <body>
-    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <!-- The root element for your Expo app. -->
-    <div id="root"></div>
-  <script src="/moyu-today/_expo/static/js/web/index-e200f672769089477599f84d622e76ce.js" defer></script>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #FF9A3E 0%, #FF7A1A 50%, #FF6B00 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        .settings-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .settings-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .settings-dots span {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .avatar-small {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Title */
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        /* Slot Machine */
+        .slot-machine {
+            background: linear-gradient(145deg, #FFE4B5 0%, #FFD39B 100%);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .slot-frame {
+            background: linear-gradient(145deg, #FFF8DC 0%, #FFE4B5 100%);
+            border-radius: 15px;
+            padding: 10px;
+            border: 4px solid #DAA520;
+        }
+
+        .slot-reels {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .slot-reel {
+            width: 80px;
+            height: 180px;
+            background: #FFF8DC;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #DAA520;
+        }
+
+        .reel-strip {
+            position: absolute;
+            width: 100%;
+            transition: transform 0.1s ease-out;
+        }
+
+        .reel-item {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .slot-handle {
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .handle-stick {
+            width: 12px;
+            height: 80px;
+            background: linear-gradient(90deg, #CD853F, #DEB887, #CD853F);
+            border-radius: 6px;
+            margin: 0 auto;
+        }
+
+        .handle-ball {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(145deg, #DAA520, #B8860B);
+            border-radius: 50%;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .handle-ball:hover {
+            transform: scale(1.1);
+        }
+
+        .handle-ball:active {
+            transform: scale(0.95) translateY(20px);
+        }
+
+        /* Result Card */
+        .result-card {
+            background: linear-gradient(145deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .result-card.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .fortune-level {
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .fortune-emoji {
+            font-size: 2.5em;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .fortune-percent {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .fortune-message {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .stats-bar .trophy {
+            font-size: 1.5em;
+        }
+
+        .stats-text {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .stats-highlight {
+            color: #FF6B00;
+            font-weight: bold;
+        }
+
+        /* Golden Time Section */
+        .golden-time {
+            background: linear-gradient(180deg, #FF8C00 0%, #FF6B00 100%);
+            border-radius: 25px 25px 0 0;
+            padding: 30px 20px;
+            margin: 0 -20px;
+            text-align: center;
+        }
+
+        .clock-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .golden-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .time-badge {
+            display: inline-block;
+            background: #FFD700;
+            color: #333;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: #FFF5EB;
+            padding: 25px 20px 40px;
+            margin: 0 -20px;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tips-header-icon {
+            font-size: 1.5em;
+        }
+
+        .tips-header-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .tip-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .tip-icon {
+            font-size: 3em;
+            flex-shrink: 0;
+        }
+
+        .tip-content {
+            flex: 1;
+        }
+
+        .tip-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #FF6B00;
+            margin-bottom: 5px;
+        }
+
+        .tip-desc {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 0 20px;
+            background: #FFF5EB;
+            margin: 0 -20px;
+            padding: 0 20px 30px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-share {
+            background: linear-gradient(145deg, #FF6B00, #FF8C00);
+            color: white;
+        }
+
+        .btn-share:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(255,107,0,0.4);
+        }
+
+        .btn-again {
+            background: white;
+            color: #FF6B00;
+            border: 2px solid #FF6B00;
+        }
+
+        .btn-again:hover {
+            background: #FFF5EB;
+        }
+
+        /* Settings Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px 25px 0 0;
+            padding: 30px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 70vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .modal-close {
+            width: 35px;
+            height: 35px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .setting-group {
+            margin-bottom: 25px;
+        }
+
+        .setting-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            background: #FFF5EB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected {
+            border-color: #FF6B00;
+            background: #FFE4C4;
+        }
+
+        .nickname-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .nickname-input:focus {
+            border-color: #FF6B00;
+        }
+
+        /* Share Modal */
+        .share-preview {
+            background: linear-gradient(145deg, #FF9A3E, #FF6B00);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .share-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .share-fortune {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .share-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .share-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .share-btn-icon {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .share-btn-text {
+            font-size: 0.7em;
+            color: #666;
+        }
+
+        /* Spinning Animation */
+        @keyframes spin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        .spinning .reel-strip {
+            animation: spin 0.1s linear infinite;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            top: -10px;
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Loading State */
+        .loading-text {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1em;
+            margin-top: 15px;
+        }
+
+        /* Initial State */
+        .initial-state {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .start-btn {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,165,0,0.4);
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255,165,0,0.5);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
+        }
+
+        .hint-text {
+            color: rgba(255,255,255,0.7);
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #FFF5EB;
+            margin: 0 -20px;
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        .footer a {
+            color: #FF6B00;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">‹</div>
+            <div class="settings-btn" onclick="openSettings()">
+                <div class="settings-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="avatar-small" id="headerAvatar">🐱</div>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <h1 class="title">今天能摸吗？</h1>
+
+        <!-- Slot Machine -->
+        <div class="slot-machine">
+            <div class="slot-frame">
+                <div class="slot-reels">
+                    <div class="slot-reel" id="reel1">
+                        <div class="reel-strip"></div>
+                    </div>
+                    <div class="slot-reel" id="reel2">
+                        <div class="reel-strip"></div>
+                    </div>
+                    <div class="slot-reel" id="reel3">
+                        <div class="reel-strip"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="slot-handle" onclick="spin()">
+                <div class="handle-ball"></div>
+                <div class="handle-stick"></div>
+            </div>
+        </div>
+
+        <!-- Initial State -->
+        <div class="initial-state" id="initialState">
+            <button class="start-btn" onclick="spin()">🎰 开始抽签</button>
+            <p class="hint-text">点击按钮或拉动手柄，看看今天的摸鱼运势</p>
+        </div>
+
+        <!-- Loading Text -->
+        <p class="loading-text" id="loadingText" style="display: none;">命运的齿轮开始转动...</p>
+
+        <!-- Result Card -->
+        <div class="result-card" id="resultCard">
+            <div class="fortune-level" id="fortuneLevel">大吉</div>
+            <div>
+                <span class="fortune-emoji" id="fortuneEmoji">😎</span>
+                <span class="fortune-percent" id="fortunePercent">88%</span>
+            </div>
+            <p class="fortune-message" id="fortuneMessage">「今天老板不在，放心大胆摸！」</p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar" style="display: none;">
+            <span class="trophy">🏆</span>
+            <span class="stats-text">摸鱼打败了全国 <span class="stats-highlight" id="beatPercent">92%</span> 的打工人！</span>
+        </div>
+
+        <!-- Golden Time Section -->
+        <div class="golden-time" id="goldenTime" style="display: none;">
+            <div class="clock-icon">⏰</div>
+            <h2 class="golden-title">黄金摸鱼时段</h2>
+            <div class="time-badge" id="goldenTimeBadge">14:00-15:30</div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-section" id="tipsSection" style="display: none;">
+            <div class="tips-header">
+                <span class="tips-header-icon">💡</span>
+                <span class="tips-header-text">摸鱼小技巧</span>
+            </div>
+            <div id="tipsList"></div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons" style="margin: 20px -20px 0; padding: 0 0 0;">
+                <button class="action-btn btn-share" onclick="openShare()">
+                    <span>📤</span> 分享运势
+                </button>
+                <button class="action-btn btn-again" onclick="spin()">
+                    <span>🔄</span> 再来一次
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer" id="footer" style="display: none;">
+            <p>本应用仅供娱乐，请合理安排工作与休息</p>
+            <p><a href="privacy.html">隐私政策</a> · © 2026 ChillWorks.ai</p>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">个性化设置</span>
+                <div class="modal-close" onclick="closeSettings()">✕</div>
+            </div>
+            <div class="setting-group">
+                <div class="setting-label">选择你的头像</div>
+                <div class="avatar-grid" id="avatarGrid"></div>
+            </div>
+            <div class="setting-group">
+                <div class="setting-label">设置昵称</div>
+                <input type="text" class="nickname-input" id="nicknameInput" placeholder="输入你的昵称" maxlength="10">
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">分享今日运势</span>
+                <div class="modal-close" onclick="closeShare()">✕</div>
+            </div>
+            <div class="share-preview" id="sharePreview">
+                <div class="share-title">🐟 今日摸鱼运势</div>
+                <div class="share-fortune" id="shareFortune">大吉 88%</div>
+                <p id="shareMessage">今天老板不在，放心大胆摸！</p>
+            </div>
+            <div class="share-buttons">
+                <div class="share-btn" onclick="copyToClipboard()" style="background: #f0f0f0;">
+                    <span class="share-btn-icon">📋</span>
+                    <span class="share-btn-text">复制</span>
+                </div>
+                <div class="share-btn" onclick="shareToWeibo()" style="background: #FFE4E1;">
+                    <span class="share-btn-icon">📱</span>
+                    <span class="share-btn-text">微博</span>
+                </div>
+                <div class="share-btn" onclick="downloadImage()" style="background: #E8F5E9;">
+                    <span class="share-btn-icon">💾</span>
+                    <span class="share-btn-text">保存</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const emojis = ['🐱', '😴', '☕', '🎮', '🛏️', '📱', '🍜', '💤', '🎵', '🌴', '🐟', '😎'];
+        
+        const avatars = ['🐱', '🐼', '🦊', '🐧', '🐰', '🐨', '🦁', '🐯'];
+        
+        const fortunes = [
+            { level: '大吉', emoji: '😎', color: '#FFD700', minPercent: 80, maxPercent: 99 },
+            { level: '中吉', emoji: '😊', color: '#FFA500', minPercent: 60, maxPercent: 79 },
+            { level: '小吉', emoji: '🙂', color: '#90EE90', minPercent: 40, maxPercent: 59 },
+            { level: '末吉', emoji: '😐', color: '#87CEEB', minPercent: 20, maxPercent: 39 },
+            { level: '凶', emoji: '😰', color: '#DDA0DD', minPercent: 5, maxPercent: 19 }
+        ];
+
+        const messages = [
+            "今天老板不在，放心大胆摸！",
+            "摸鱼一时爽，一直摸一直爽！",
+            "工作是做不完的，但摸鱼的时光是有限的。",
+            "今天适合带薪拉屎，记得带手机。",
+            "假装很忙，实际在神游。",
+            "今天的KPI就是不被发现在摸鱼。",
+            "灵魂已经下班，肉体还在工位。",
+            "今天适合对着屏幕发呆。",
+            "摸鱼使我快乐，工作使我憔悴。",
+            "今天的运势：老板不会突然出现。",
+            "适合假装在思考人生。",
+            "今天可以多喝几杯水，顺便多上几次厕所。",
+            "建议今天开会时打开摄像头但关闭大脑。",
+            "今日宜：摸鱼、划水、带薪午睡。",
+            "今天的效率：用1小时完成10分钟的工作。",
+            "适合打开Excel假装在做数据分析。",
+            "今天可以名正言顺地说在等需求。",
+            "建议今天把摸鱼时间拉满。",
+            "今天老板的眼神不会扫到你这边。",
+            "适合戴上耳机假装在开会。"
+        ];
+
+        const tips = [
+            { icon: '🚽', title: '带薪上厕所', desc: '每天带薪如厕15分钟，一年多赚一周工资！' },
+            { icon: '💻', title: '假装很忙', desc: '打开多个窗口，眉头紧锁，偶尔叹气。' },
+            { icon: '☕', title: '茶水间社交', desc: '去接水顺便聊个天，合理合法的摸鱼时间。' },
+            { icon: '📧', title: '邮件艺术', desc: '一封邮件分三次发，显得工作很饱和。' },
+            { icon: '🎧', title: '耳机护体', desc: '戴上耳机，假装在听会议录音。' },
+            { icon: '📊', title: 'Excel大法', desc: '打开一个复杂的表格，没人知道你在干嘛。' }
+        ];
+
+        const goldenTimes = [
+            '09:30-10:00', '11:30-12:00', '14:00-15:30', '16:30-17:30'
+        ];
+
+        // State
+        let isSpinning = false;
+        let currentFortune = null;
+        let selectedAvatar = localStorage.getItem('avatar') || '🐱';
+        let nickname = localStorage.getItem('nickname') || '';
+
+        // Initialize
+        function init() {
+            initReels();
+            initAvatars();
+            updateHeaderAvatar();
+            document.getElementById('nicknameInput').value = nickname;
+        }
+
+        function initReels() {
+            const reels = document.querySelectorAll('.reel-strip');
+            reels.forEach(reel => {
+                let html = '';
+                for (let i = 0; i < 20; i++) {
+                    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                    html += `<div class="reel-item">${emoji}</div>`;
+                }
+                reel.innerHTML = html;
+            });
+        }
+
+        function initAvatars() {
+            const grid = document.getElementById('avatarGrid');
+            grid.innerHTML = avatars.map(avatar => `
+                <div class="avatar-option ${avatar === selectedAvatar ? 'selected' : ''}" 
+                     onclick="selectAvatar('${avatar}')">${avatar}</div>
+            `).join('');
+        }
+
+        function selectAvatar(avatar) {
+            selectedAvatar = avatar;
+            localStorage.setItem('avatar', avatar);
+            initAvatars();
+            updateHeaderAvatar();
+        }
+
+        function updateHeaderAvatar() {
+            document.getElementById('headerAvatar').textContent = selectedAvatar;
+        }
+
+        // Spin
+        function spin() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            // Hide initial state
+            document.getElementById('initialState').style.display = 'none';
+            document.getElementById('loadingText').style.display = 'block';
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('statsBar').style.display = 'none';
+            document.getElementById('goldenTime').style.display = 'none';
+            document.getElementById('tipsSection').style.display = 'none';
+            document.getElementById('footer').style.display = 'none';
+
+            // Start spinning animation
+            const reels = document.querySelectorAll('.slot-reel');
+            reels.forEach(reel => reel.classList.add('spinning'));
+
+            // Regenerate reel content during spin
+            const strips = document.querySelectorAll('.reel-strip');
+            const spinInterval = setInterval(() => {
+                strips.forEach(strip => {
+                    let html = '';
+                    for (let i = 0; i < 20; i++) {
+                        const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                        html += `<div class="reel-item">${emoji}</div>`;
+                    }
+                    strip.innerHTML = html;
+                });
+            }, 100);
+
+            // Stop after delay
+            setTimeout(() => {
+                clearInterval(spinInterval);
+                reels.forEach((reel, index) => {
+                    setTimeout(() => {
+                        reel.classList.remove('spinning');
+                    }, index * 200);
+                });
+
+                setTimeout(() => {
+                    showResult();
+                }, 600);
+            }, 2000);
+        }
+
+        function showResult() {
+            isSpinning = false;
+            document.getElementById('loadingText').style.display = 'none';
+
+            // Random fortune
+            const fortuneIndex = Math.floor(Math.random() * fortunes.length);
+            currentFortune = fortunes[fortuneIndex];
+            const percent = Math.floor(Math.random() * (currentFortune.maxPercent - currentFortune.minPercent + 1)) + currentFortune.minPercent;
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            const beatPercent = Math.floor(Math.random() * 30) + 70;
+            const goldenTime = goldenTimes[Math.floor(Math.random() * goldenTimes.length)];
+
+            // Update UI
+            document.getElementById('fortuneLevel').textContent = currentFortune.level;
+            document.getElementById('fortuneEmoji').textContent = currentFortune.emoji;
+            document.getElementById('fortunePercent').textContent = percent + '%';
+            document.getElementById('fortuneMessage').textContent = `「${message}」`;
+            document.getElementById('beatPercent').textContent = beatPercent + '%';
+            document.getElementById('goldenTimeBadge').textContent = goldenTime;
+
+            // Update share content
+            document.getElementById('shareFortune').textContent = `${currentFortune.level} ${percent}%`;
+            document.getElementById('shareMessage').textContent = message;
+
+            // Show result card
+            document.getElementById('resultCard').classList.add('show');
+
+            // Show other sections with delay
+            setTimeout(() => {
+                document.getElementById('statsBar').style.display = 'flex';
+            }, 300);
+
+            setTimeout(() => {
+                document.getElementById('goldenTime').style.display = 'block';
+            }, 500);
+
+            setTimeout(() => {
+                showTips();
+                document.getElementById('tipsSection').style.display = 'block';
+            }, 700);
+
+            setTimeout(() => {
+                document.getElementById('footer').style.display = 'block';
+            }, 900);
+
+            // Confetti for good fortune
+            if (fortuneIndex <= 1) {
+                createConfetti();
+            }
+        }
+
+        function showTips() {
+            const shuffled = [...tips].sort(() => Math.random() - 0.5).slice(0, 3);
+            document.getElementById('tipsList').innerHTML = shuffled.map(tip => `
+                <div class="tip-card">
+                    <div class="tip-icon">${tip.icon}</div>
+                    <div class="tip-content">
+                        <div class="tip-title">${tip.title}</div>
+                        <div class="tip-desc">${tip.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function createConfetti() {
+            const colors = ['#FFD700', '#FF6B00', '#FF69B4', '#00CED1', '#98FB98'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // Settings Modal
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
+            const newNickname = document.getElementById('nicknameInput').value;
+            if (newNickname !== nickname) {
+                nickname = newNickname;
+                localStorage.setItem('nickname', nickname);
+            }
+        }
+
+        // Share Modal
+        function openShare() {
+            document.getElementById('shareModal').classList.add('show');
+        }
+
+        function closeShare() {
+            document.getElementById('shareModal').classList.remove('show');
+        }
+
+        function copyToClipboard() {
+            const text = `🐟 今日摸鱼运势：${currentFortune.level}\n${document.getElementById('shareMessage').textContent}\n\n来测测你的摸鱼运势 👉 chillworks.ai`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('已复制到剪贴板！');
+            });
+        }
+
+        function shareToWeibo() {
+            const text = encodeURIComponent(`🐟 今日摸鱼运势：${currentFortune.level}\n${document.getElementById('shareMessage').textContent}\n\n来测测你的摸鱼运势 👉 chillworks.ai`);
+            window.open(`https://service.weibo.com/share/share.php?title=${text}`, '_blank');
+        }
+
+        function downloadImage() {
+            alert('长按分享卡片可保存图片');
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // Initialize
+        init();
+    </script>
 </body>
 </html>
