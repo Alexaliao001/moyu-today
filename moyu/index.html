@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>今天能摸吗？- ChillWorks</title>
+    <meta name="description" content="办公室解压神器，专治不想上班。每日摸鱼运势，看看今天适不适合摸鱼！">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐟</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #FF9A3E 0%, #FF7A1A 50%, #FF6B00 100%);
+            min-height: 100vh;
+            color: #333;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0 20px;
+        }
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 300;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+        .menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.25);
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+        .menu-dots { display: flex; gap: 4px; }
+        .menu-dots span { width: 6px; height: 6px; background: white; border-radius: 50%; }
+        .menu-avatar {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.8em;
+            font-weight: bold;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+        .slot-machine {
+            background: linear-gradient(145deg, #FFE4B5 0%, #FFD39B 50%, #F5C77E 100%);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.5);
+            position: relative;
+        }
+        .slot-frame {
+            background: linear-gradient(180deg, #FFF8E7 0%, #FFE8C4 100%);
+            border-radius: 18px;
+            padding: 12px;
+            border: 5px solid #D4A84B;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .slot-reels { display: flex; gap: 8px; justify-content: center; }
+        .slot-reel {
+            width: 90px;
+            height: 200px;
+            background: linear-gradient(180deg, #FFF8E7 0%, #FFFBF3 50%, #FFF8E7 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #D4A84B;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.08);
+        }
+        .reel-strip {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.15s ease-out;
+        }
+        .reel-item {
+            width: 90px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+        .slot-handle {
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 10;
+        }
+        .handle-ball {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(145deg, #E8C547 0%, #C9A227 50%, #A68520 100%);
+            border-radius: 50%;
+            margin: 0 auto 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4);
+            transition: transform 0.2s;
+        }
+        .handle-ball:active { transform: translateY(15px); }
+        .handle-stick {
+            width: 14px;
+            height: 80px;
+            background: linear-gradient(90deg, #C9A227 0%, #E8C547 30%, #C9A227 70%, #A68520 100%);
+            border-radius: 7px;
+            margin: 0 auto;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.2);
+        }
+        .result-card {
+            background: linear-gradient(145deg, #FFD54F 0%, #FFB300 50%, #FF9800 100%);
+            border-radius: 24px;
+            padding: 30px 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 40px rgba(255,152,0,0.4), inset 0 2px 0 rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .result-card.show { transform: scale(1); opacity: 1; }
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .fortune-level {
+            font-size: 4em;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+            letter-spacing: 0.1em;
+        }
+        .fortune-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .fortune-emoji { font-size: 3em; }
+        .fortune-percent {
+            font-size: 3em;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        .fortune-message {
+            color: white;
+            font-size: 1.2em;
+            margin-top: 25px;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .stats-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 18px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            margin-top: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        .stats-bar.show { opacity: 1; transform: translateY(0); }
+        .stats-bar .trophy { font-size: 1.8em; }
+        .stats-text { font-size: 1.1em; color: #555; }
+        .stats-highlight { color: #FF6B00; font-weight: bold; font-size: 1.2em; }
+        .initial-state {
+            text-align: center;
+            padding: 30px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .start-btn {
+            background: linear-gradient(145deg, #FFD54F 0%, #FFB300 100%);
+            color: white;
+            border: none;
+            padding: 22px 60px;
+            font-size: 1.4em;
+            font-weight: bold;
+            border-radius: 35px;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(255,179,0,0.5);
+            transition: all 0.3s;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .start-btn:hover { transform: translateY(-3px); box-shadow: 0 18px 45px rgba(255,179,0,0.6); }
+        .start-btn:active { transform: translateY(0); }
+        .hint-text { color: rgba(255,255,255,0.8); margin-top: 20px; font-size: 1em; }
+        .loading-text {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+            margin-top: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            top: -20px;
+            animation: confetti-fall 3.5s linear forwards;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        @media (max-width: 380px) {
+            .title { font-size: 2.2em; }
+            .slot-reel { width: 75px; height: 170px; }
+            .reel-item { width: 75px; height: 56px; font-size: 36px; }
+            .fortune-level { font-size: 3em; }
+            .fortune-emoji, .fortune-percent { font-size: 2.5em; }
+        }
+        @media (min-width: 500px) { .container { padding: 30px; } .title { font-size: 3.2em; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="../" class="back-btn">‹</a>
+            <div class="menu-btn">
+                <div class="menu-dots"><span></span><span></span><span></span></div>
+                <div class="menu-avatar">🐱</div>
+            </div>
+        </div>
+        <h1 class="title">今天能摸吗？</h1>
+        <div class="slot-machine">
+            <div class="slot-frame">
+                <div class="slot-reels">
+                    <div class="slot-reel" id="reel1"><div class="reel-strip"></div></div>
+                    <div class="slot-reel" id="reel2"><div class="reel-strip"></div></div>
+                    <div class="slot-reel" id="reel3"><div class="reel-strip"></div></div>
+                </div>
+            </div>
+            <div class="slot-handle" onclick="spin()">
+                <div class="handle-ball"></div>
+                <div class="handle-stick"></div>
+            </div>
+        </div>
+        <div class="initial-state" id="initialState">
+            <button class="start-btn" onclick="spin()">🎰 开始抽签</button>
+            <p class="hint-text">点击按钮或拉动手柄，测测今天的摸鱼运势</p>
+        </div>
+        <p class="loading-text" id="loadingText" style="display: none;">命运的齿轮开始转动...</p>
+        <div class="result-card" id="resultCard">
+            <div class="fortune-level" id="fortuneLevel">大吉</div>
+            <div class="fortune-row">
+                <span class="fortune-emoji" id="fortuneEmoji">😎</span>
+                <span class="fortune-percent" id="fortunePercent">88%</span>
+            </div>
+            <p class="fortune-message" id="fortuneMessage">今天老板不在，放心大胆摸！</p>
+        </div>
+        <div class="stats-bar" id="statsBar">
+            <span class="trophy">🏆</span>
+            <span class="stats-text">摸鱼打败了全国 <span class="stats-highlight" id="beatPercent">92%</span> 的打工人！</span>
+        </div>
+    </div>
+    <script>
+        const emojis = ['🐱', '😴', '☕', '🎮', '🛏️', '📱', '🍜', '💤', '🎵', '🌴', '🐟', '😎', '🎧', '🍕'];
+        const fortunes = [
+            { level: '大吉', emoji: '😎', minPercent: 85, maxPercent: 99 },
+            { level: '中吉', emoji: '😊', minPercent: 65, maxPercent: 84 },
+            { level: '小吉', emoji: '🙂', minPercent: 45, maxPercent: 64 },
+            { level: '末吉', emoji: '😐', minPercent: 25, maxPercent: 44 },
+            { level: '凶', emoji: '😰', minPercent: 5, maxPercent: 24 }
+        ];
+        const messages = [
+            "今天老板不在，放心大胆摸！",
+            "摸鱼一时爽，一直摸一直爽！",
+            "工作是做不完的，但摸鱼的时光是有限的。",
+            "今天适合带薪拉屎，记得带手机。",
+            "假装很忙，实际在神游。",
+            "今天的KPI就是不被发现在摸鱼。",
+            "灵魂已经下班，肉体还在工位。",
+            "今天适合对着屏幕发呆。",
+            "摸鱼使我快乐，工作使我憔悴。",
+            "今天的运势：老板不会突然出现。",
+            "适合假装在思考人生。",
+            "今天可以多喝几杯水，顺便多上几次厕所。",
+            "建议今天开会时打开摄像头但关闭大脑。",
+            "今日宜：摸鱼、划水、带薪午睡。",
+            "今天的效率：用1小时完成10分钟的工作。",
+            "适合打开Excel假装在做数据分析。",
+            "今天可以名正言顺地说在等需求。",
+            "建议今天把摸鱼时间拉满。",
+            "今天老板的眼神不会扫到你这边。",
+            "适合戴上耳机假装在开会。"
+        ];
+        let isSpinning = false;
+        function init() { initReels(); }
+        function initReels() {
+            document.querySelectorAll('.reel-strip').forEach(reel => {
+                let html = '';
+                for (let i = 0; i < 12; i++) {
+                    html += `<div class="reel-item">${emojis[Math.floor(Math.random() * emojis.length)]}</div>`;
+                }
+                reel.innerHTML = html;
+            });
+        }
+        function spin() {
+            if (isSpinning) return;
+            isSpinning = true;
+            document.getElementById('initialState').style.display = 'none';
+            document.getElementById('loadingText').style.display = 'block';
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('statsBar').classList.remove('show');
+            const strips = document.querySelectorAll('.reel-strip');
+            const spinInterval = setInterval(() => {
+                strips.forEach(strip => {
+                    let html = '';
+                    for (let i = 0; i < 12; i++) {
+                        html += `<div class="reel-item">${emojis[Math.floor(Math.random() * emojis.length)]}</div>`;
+                    }
+                    strip.innerHTML = html;
+                });
+            }, 80);
+            setTimeout(() => { clearInterval(spinInterval); showResult(); }, 2200);
+        }
+        function showResult() {
+            isSpinning = false;
+            document.getElementById('loadingText').style.display = 'none';
+            const fortuneIndex = Math.floor(Math.random() * fortunes.length);
+            const fortune = fortunes[fortuneIndex];
+            const percent = Math.floor(Math.random() * (fortune.maxPercent - fortune.minPercent + 1)) + fortune.minPercent;
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            const beatPercent = Math.floor(Math.random() * 25) + 75;
+            document.getElementById('fortuneLevel').textContent = fortune.level;
+            document.getElementById('fortuneEmoji').textContent = fortune.emoji;
+            document.getElementById('fortunePercent').textContent = percent + '%';
+            document.getElementById('fortuneMessage').textContent = message;
+            document.getElementById('beatPercent').textContent = beatPercent + '%';
+            document.getElementById('resultCard').classList.add('show');
+            setTimeout(() => { document.getElementById('statsBar').classList.add('show'); }, 400);
+            if (fortuneIndex <= 1) createConfetti();
+        }
+        function createConfetti() {
+            const colors = ['#FFD700', '#FF6B00', '#FF69B4', '#00CED1', '#98FB98', '#FF4500', '#9370DB'];
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 60);
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
